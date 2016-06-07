@@ -1,5 +1,7 @@
 require "rails_cleaner/version"
 
 module RailsCleaner
-  # Your code goes here...
+  def self.hello
+    puts "Hello world"
+  end
 end
