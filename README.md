@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/harrim91/rails_cleaner.png?label=ready&title=Ready)](https://waffle.io/harrim91/rails_cleaner)
 # RailsCleaner
 
 [![Stories in Ready](https://badge.waffle.io/harrim91/rails_cleaner.svg?label=ready&title=Ready)](http://waffle.io/harrim91/rails_cleaner)
