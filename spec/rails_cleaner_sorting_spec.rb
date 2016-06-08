@@ -7,8 +7,9 @@ describe RailsCleaner do
 
   before :each do
     Dir.mkdir 'test_dir'
-    File.open 'test_dir/file_1.coffee', 'w'
-    File.open 'test_dir/file_2.scss', 'w'
+    File.open 'test_dir/file.coffee', 'w'
+    File.open 'test_dir/file.scss', 'w'
+    File.open 'test_dir/file.rb', 'w'
   end
 
   after :each do
@@ -28,13 +29,19 @@ describe RailsCleaner do
     it 'adds all .coffee files in a given path to tracked_files.txt' do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file_1.coffee/
+      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file.coffee/
     end
 
-    it 'adds all .sass files in a given path to tracked_files.txt' do
+    it 'adds all .scss files in a given path to tracked_files.txt' do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file_2.scss/
+      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file.scss/
+    end
+
+    it 'doesn\'t add other files' do
+      rails_cleaner.init
+      rails_cleaner.track 'test_dir'
+      expect(File.read '.rails_cleaner/tracked_files.txt').not_to match /test_dir\/file.rb/
     end
   end
 
