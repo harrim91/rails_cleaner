@@ -1,2 +1,0 @@
-'test_dir2/files/file_1.txt'
-'test_dir2/files/file_2.txt'
