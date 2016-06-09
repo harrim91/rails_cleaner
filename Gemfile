@@ -6,4 +6,5 @@ group :test do
   gem 'coveralls'
   gem 'byebug'
   gem 'rspec'
+  gem 'rake'
 end
