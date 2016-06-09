@@ -1,7 +1,6 @@
 # RailsCleaner
 
 [![Stories in Ready](https://badge.waffle.io/harrim91/rails_cleaner.svg?label=ready&title=Ready)](http://waffle.io/harrim91/rails_cleaner)
-
 [![Gem Version](https://badge.fury.io/rb/rails_cleaner.svg)](https://badge.fury.io/rb/rails_cleaner)
 
 
