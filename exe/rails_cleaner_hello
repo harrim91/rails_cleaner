@@ -2,4 +2,4 @@
 
 require 'rails_cleaner'
 
-puts RailsCleaner.init
+puts RailsCleaner.hello

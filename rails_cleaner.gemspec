@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
-  spec.executables   = ["rails_cleaner_init","rails_cleaner_track","rails_cleaner_sort","rails_cleaner_delete"]
+  spec.executables   = ["rails_cleaner_hello","rails_cleaner_init","rails_cleaner_track","rails_cleaner_sort","rails_cleaner_delete"]
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.12"
