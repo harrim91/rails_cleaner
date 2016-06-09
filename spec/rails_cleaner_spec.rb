@@ -62,14 +62,14 @@ describe RailsCleaner do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect(File.read('test_dir/files_to_delete.txt')).to match 'test_dir/file.scss'
+      expect(File.read('.rails_cleaner/files_to_delete.txt')).to match 'test_dir/file.scss'
     end
 
     it 'doesn\t write modified files' do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect(File.read('test_dir/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
+      expect(File.read('.rails_cleaner/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
     end
   end
 

@@ -22,7 +22,7 @@ module RailsCleaner
   def self.sort
     File.open '.rails_cleaner/tracked_files.txt', 'r' do |tracked_files|
       tracked_files.each_line do |line|
-        if File.ctime(line)==File.birthtime(line)
+        if File.ctime(line.strip)==File.birthtime(line.strip)
           File.open '.rails_cleaner/files_to_delete.txt', 'w' do |file|
             file.write "#{line}\n"
           end
