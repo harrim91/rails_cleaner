@@ -98,7 +98,8 @@ describe RailsCleaner do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect{ rails_cleaner.delete }.to raise_error 'no files to delete'
+      rails_cleaner.delete
+      expect(File.exist? 'test_dir/file.coffee').to eq true
     end
   end
 end

@@ -62,7 +62,10 @@ module RailsCleaner
 
   private
   def self.confirm_delete files
-    fail 'no files to delete' if files.empty?
+    if files.empty?
+      puts 'no files to delete'
+      exit
+    end
     puts 'you are about to delete:'
     files.each { |file| puts file.colorize(:red) }
     puts 'y or n?'
