@@ -5,25 +5,16 @@ module RailsCleaner
   DIRECTORY_PATH = ".rails_cleaner"
   FILE_NAME = "tracked_files.txt"
 
-  def self.hello
-    puts "you are about to delete #{File.open("#{DIRECTORY_PATH+'/'+FILENAME}", "r").each { |line| puts line }}"
-    puts "y or n?"
-    answer = gets.chomp
-    if answer.downcase == 'y'
-      self.test
-    end
-  end
-
   def self.test
     puts "next level - you legend!"
   end
 
   def self.init
-    Dir.mkdir "#{DIRECTORY_PATH}"
-    File.open "#{DIRECTORY_PATH}/#{FILE_NAME}", 'w'
+    Dir.mkdir DIRECTORY_PATH unless Dir.exist?(DIRECTORY_PATH)
+    File.open "#{DIRECTORY_PATH}/#{FILE_NAME}", 'w' unless File.exist?("#{DIRECTORY_PATH}/#{FILE_NAME}",)
   end
 
-  def self.track path="app/assets"
+  def self.track path='app/assets'
     tracked_files = Dir.glob("#{path}/**/*").select do |file|
       file.match(/.(scss|coffee)$/)
     end
@@ -51,5 +42,23 @@ module RailsCleaner
     end
   end
 
+  def self.delete
+    self.confirm_delete
+    File.open '.rails_cleaner/files_to_delete.txt', 'r' do |file|
+      file.each_line do |line|
+        File.delete line.strip
+      end
+    end
+  end
 
+  private
+  def self.confirm_delete
+    puts 'you are about to delete:'
+    File.open "#{DIRECTORY_PATH+'/'+FILE_NAME}", 'r' do |file|
+      file.each_line { |line| puts line }
+    end
+    puts 'y or n?'
+    answer = gets.chomp
+    fail 'delete aborted' unless answer.downcase == 'y'
+  end
 end

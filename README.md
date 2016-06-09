@@ -2,9 +2,12 @@
 
 [![Stories in Ready](https://badge.waffle.io/harrim91/rails_cleaner.svg?label=ready&title=Ready)](http://waffle.io/harrim91/rails_cleaner)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails_cleaner`. To experiment with that code, run `bin/console` for an interactive prompt.
+[![Build Status](https://travis-ci.org/harrim91/rails_cleaner.svg?branch=master)](https://travis-ci.org/harrim91/rails_cleaner)
 
-TODO: Delete this and the text above, and describe your gem
+[![Coverage Status](https://coveralls.io/repos/github/harrim91/rails_cleaner/badge.svg?branch=master)](https://coveralls.io/github/harrim91/rails_cleaner?branch=master)
+
+
+Tracks and deletes any unused auto-generated scss and coffeescript files from your rails project.
 
 ## Installation
 
@@ -24,11 +27,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+In your command line:
+
+`rails_cleaner_init` creates a `.rails_cleaner` directory in your working directory, containing a `tracked_fies.txt` file.
+`rails_cleaner_track` adds all `.scss` and `.coffee` files in the `app/assets` directory to `tracked_files.txt`
+`rails_cleaner_sort` creates `files_to_delete.txt` in `.rails_cleaner`. This contains all files from `tracked_files.txt` where the created time and last modified times are the same.
+`rails_cleaner_delete` deletes all files listed in `files_to_delete.txt`
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
