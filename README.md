@@ -1,10 +1,7 @@
 # RailsCleaner
 
 [![Stories in Ready](https://badge.waffle.io/harrim91/rails_cleaner.svg?label=ready&title=Ready)](http://waffle.io/harrim91/rails_cleaner)
-
-[![Build Status](https://travis-ci.org/harrim91/rails_cleaner.svg?branch=master)](https://travis-ci.org/harrim91/rails_cleaner)
-
-[![Coverage Status](https://coveralls.io/repos/github/harrim91/rails_cleaner/badge.svg?branch=master)](https://coveralls.io/github/harrim91/rails_cleaner?branch=master)
+[![Gem Version](https://badge.fury.io/rb/rails_cleaner.svg)](https://badge.fury.io/rb/rails_cleaner)
 
 
 Tracks and deletes any unused auto-generated scss and coffeescript files from your rails project.
@@ -42,7 +39,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rails_cleaner.
+Bug reports and pull requests are welcome on GitHub at https://github.com/harrim91/rails_cleaner.
 
 
 ## License

@@ -1,4 +1,5 @@
 require 'rails_cleaner/version'
+require 'colorize'
 
 module RailsCleaner
 
@@ -63,7 +64,7 @@ module RailsCleaner
   def self.confirm_delete files
     fail 'no files to delete' if files.empty?
     puts 'you are about to delete:'
-    files.each { |file| puts file }
+    files.each { |file| puts file.colorize(:red) }
     puts 'y or n?'
     answer = gets.chomp
     fail 'delete aborted' unless answer.downcase == 'y'
