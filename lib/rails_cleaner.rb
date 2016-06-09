@@ -7,7 +7,7 @@ module RailsCleaner
     File.open '.rails_cleaner/tracked_files.txt', 'w'
   end
 
-  def self.track path="app/assets"
+  def self.track path='app/assets'
     tracked_files = Dir.glob("#{path}/**/*").select do |file|
       file.match(/.(scss|coffee)$/)
     end
@@ -31,6 +31,14 @@ module RailsCleaner
     File.open '.rails_cleaner/files_to_delete.txt', 'w' do |file|
       unmodified_files.each do |unmodified_file|
         file.write "#{unmodified_file}"
+      end
+    end
+  end
+
+  def self.delete
+    File.open '.rails_cleaner/files_to_delete.txt', 'r' do |file|
+      file.each_line do |line|
+        File.delete line.strip
       end
     end
   end
