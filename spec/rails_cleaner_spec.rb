@@ -4,7 +4,7 @@ describe RailsCleaner do
 
   subject(:rails_cleaner) { described_class }
 
-  before :each do
+  before :all do
     Dir.mkdir 'test_dir'
     Dir.mkdir 'test_dir/dir1'
     File.open 'test_dir/file.coffee', 'w'
@@ -15,6 +15,9 @@ describe RailsCleaner do
 
   after :each do
     FileUtils.rm_r '.rails_cleaner'
+  end
+
+  after :all do
     FileUtils.rm_r 'test_dir'
   end
 
@@ -53,6 +56,7 @@ describe RailsCleaner do
 
   describe 'self#sort' do
     before :each do
+      sleep 1
       File.open 'test_dir/file.coffee', 'w' do |file|
         file.write 'modified'
       end
