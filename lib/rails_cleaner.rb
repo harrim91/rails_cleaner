@@ -2,6 +2,10 @@ require 'rails_cleaner/version'
 
 module RailsCleaner
 
+  def self.hello(dog)
+    puts "Hello World #{dog}!"
+  end
+
   def self.init
     Dir.mkdir '.rails_cleaner'
     File.open '.rails_cleaner/tracked_files.txt', 'w'

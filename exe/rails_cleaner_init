@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'rails_cleaner'
+
+puts RailsCleaner.init
