@@ -8,9 +8,13 @@ module RailsCleaner
   end
 
   def self.track path
+    tracked_files = Dir.glob("#{path}/**/*").select do |file|
+      file.match(/.(scss|coffee)$/)
+    end
+
     File.open '.rails_cleaner/tracked_files.txt', 'w' do |file|
-      Dir.entries(path).each do |entry|
-        file.write "#{path}/#{entry}\n" if entry.match(/.(scss|coffee)/)
+      tracked_files.each do |entry|
+        file.write "#{path}/#{entry}\n"
       end
     end
   end
