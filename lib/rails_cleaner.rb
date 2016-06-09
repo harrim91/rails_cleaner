@@ -1,36 +1,38 @@
-require "rails_cleaner/version"
+require 'rails_cleaner/version'
 
 module RailsCleaner
-  def self.hello
-    puts "Hello world"
+
+  def self.init
+    Dir.mkdir '.rails_cleaner'
+    File.open '.rails_cleaner/tracked_files.txt', 'w'
   end
 
-  def self.init(to)
-    files = Dir.glob("**/*")
-    array = []
-    files.each do |file|
-    if file.match(/.(scss|coffee|rb)/)
-    array << file
-  end
-  File.open (to), "w" do |f|
-    array.each do |line|
-      f.write line + "\n"
+  def self.track path="app/assets"
+    tracked_files = Dir.glob("#{path}/**/*").select do |file|
+      file.match(/.(scss|coffee)$/)
+    end
+
+    File.open '.rails_cleaner/tracked_files.txt', 'w' do |file|
+      tracked_files.each do |entry|
+        file.write "#{entry}\n"
       end
     end
   end
 
-  def self.sort(from,to)
-    new_array = []
-      File.foreach(from) do |line|
-      file = line.strip.gsub("'", "")
-        if File.ctime(file)==File.birthtime(file)
-          new_array << file
-        end
-      File.open to, "w" do |f|
-        new_array.each do |line|
-          f.write line + "\n"
-        end
+  def self.sort
+    unmodified_files = []
+
+    File.open '.rails_cleaner/tracked_files.txt', 'r' do |file|
+      file.each_line do |line|
+        unmodified_files << line if File.ctime(line.strip)==File.birthtime(line.strip)
+      end
+    end
+
+    File.open '.rails_cleaner/files_to_delete.txt', 'w' do |file|
+      unmodified_files.each do |unmodified_file|
+        file.write "#{unmodified_file}"
       end
     end
   end
+
 end
