@@ -79,27 +79,26 @@ describe RailsCleaner do
 
   describe 'self#delete' do
     before :each do
-      sleep 1
+      sleep 2
       File.open 'test_dir/file.coffee', 'w' do |file|
         file.write 'modified'
       end
     end
 
     it 'deletes all the files listed in .rails_cleaner/files_to_delete.txt' do
-        rails_cleaner.init
-        rails_cleaner.track 'test_dir'
-        rails_cleaner.sort
-        rails_cleaner.delete
-        expect(File.exist? 'test_dir/dir1/file1.coffee').to eq false
-        expect(File.exist? 'test_dir/file.scss').to eq false
+      rails_cleaner.init
+      rails_cleaner.track 'test_dir'
+      rails_cleaner.sort
+      rails_cleaner.delete
+      expect(File.exist? 'test_dir/dir1/file1.coffee').to eq false
+      expect(File.exist? 'test_dir/file.scss').to eq false
     end
 
     it 'only deletes files listed in .rails_cleaner/files_to_delete.txt' do
-        rails_cleaner.init
-        rails_cleaner.track 'test_dir'
-        rails_cleaner.sort
-        rails_cleaner.delete
-        expect(File.exist? 'test_dir/file.coffee').to eq true
+      rails_cleaner.init
+      rails_cleaner.track 'test_dir'
+      rails_cleaner.sort
+      expect{ rails_cleaner.delete }.to raise_error 'no files to delete'
     end
   end
 end

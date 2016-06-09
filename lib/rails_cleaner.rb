@@ -40,22 +40,42 @@ module RailsCleaner
   end
 
   def self.delete
-    self.confirm_delete
+    files = []
+
     File.open "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}", 'r' do |file|
       file.each_line do |line|
-        File.delete line.strip
+        files << line.strip
       end
     end
+
+    self.confirm_delete files
+
+    files.each do |file|
+      File.delete file
+    end
+
+    self.delete_delete_file
+    self.clear_tracking_file
+
   end
 
   private
-  def self.confirm_delete
+  def self.confirm_delete files
+    fail 'no files to delete' if files.empty?
     puts 'you are about to delete:'
-    File.open "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}", 'r' do |file|
-      file.each_line { |line| puts line }
-    end
+    files.each { |file| puts file }
     puts 'y or n?'
     answer = gets.chomp
     fail 'delete aborted' unless answer.downcase == 'y'
+  end
+
+  def self.delete_delete_file
+    File.delete "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}"
+  end
+
+  def self.clear_tracking_file
+    File.open "#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}", 'w' do |file|
+      file.truncate 0
+    end
   end
 end
