@@ -35,4 +35,12 @@ module RailsCleaner
     end
   end
 
+  def self.delete
+    File.open '.rails_cleaner/files_to_delete.txt', 'r' do |file|
+      file.each_line do |line|
+        File.delete line.strip
+      end
+    end
+  end
+
 end
