@@ -1,4 +1,4 @@
-require "rails_cleaner/version"
+require 'rails_cleaner/version'
 
 module RailsCleaner
 
@@ -7,7 +7,7 @@ module RailsCleaner
     File.open '.rails_cleaner/tracked_files.txt', 'w'
   end
 
-  def self.track path="app/assets"
+  def self.track path='app/assets'
     tracked_files = Dir.glob("#{path}/**/*").select do |file|
       file.match(/.(scss|coffee)$/)
     end
