@@ -4,7 +4,7 @@ describe RailsCleaner do
 
   subject(:rails_cleaner) { described_class }
 
-  before :each do
+  before :all do
     Dir.mkdir 'test_dir'
     Dir.mkdir 'test_dir/dir1'
     File.open 'test_dir/file.coffee', 'w'
@@ -15,6 +15,9 @@ describe RailsCleaner do
 
   after :each do
     FileUtils.rm_r '.rails_cleaner'
+  end
+
+  after :all do
     FileUtils.rm_r 'test_dir'
   end
 
@@ -53,6 +56,7 @@ describe RailsCleaner do
 
   describe 'self#sort' do
     before :each do
+      sleep 1
       File.open 'test_dir/file.coffee', 'w' do |file|
         file.write 'modified'
       end
@@ -62,14 +66,14 @@ describe RailsCleaner do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect(File.read('test_dir/files_to_delete.txt')).to match 'test_dir/file.scss'
+      expect(File.read('.rails_cleaner/files_to_delete.txt')).to match 'test_dir/file.scss'
     end
 
     it 'doesn\t write modified files' do
       rails_cleaner.init
       rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect(File.read('test_dir/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
+      expect(File.read('.rails_cleaner/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
     end
   end
 

@@ -24,13 +24,17 @@ module RailsCleaner
   end
 
   def self.sort
-    File.open '.rails_cleaner/tracked_files.txt', 'r' do |tracked_files|
-      tracked_files.each_line do |line|
-        if File.ctime(line)==File.birthtime(line)
-          File.open '.rails_cleaner/files_to_delete.txt', 'w' do |file|
-            file.write "#{line}\n"
-          end
-        end
+    unmodified_files = []
+
+    File.open '.rails_cleaner/tracked_files.txt', 'r' do |file|
+      file.each_line do |line|
+        unmodified_files << line if File.ctime(line.strip)==File.birthtime(line.strip)
+      end
+    end
+
+    File.open '.rails_cleaner/files_to_delete.txt', 'w' do |file|
+      unmodified_files.each do |unmodified_file|
+        file.write "#{unmodified_file}"
       end
     end
   end
