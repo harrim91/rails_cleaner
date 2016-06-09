@@ -52,18 +52,24 @@ describe RailsCleaner do
   end
 
   describe 'self#sort' do
-    before :all do
+    before :each do
       File.open 'test_dir/file.coffee', 'w' do |file|
         file.write 'modified'
       end
     end
+
     it 'writes unmodified files to files_to_delete.txt' do
+      rails_cleaner.init
+      rails_cleaner.track 'test_dir'
       rails_cleaner.sort
-      expect(File.read('test_dir/files_to_delete.txt')).to match 'test_dir/files/file.scss'
+      expect(File.read('test_dir/files_to_delete.txt')).to match 'test_dir/file.scss'
     end
 
     it 'doesn\t write modified files' do
-
+      rails_cleaner.init
+      rails_cleaner.track 'test_dir'
+      rails_cleaner.sort
+      expect(File.read('test_dir/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
     end
   end
 
