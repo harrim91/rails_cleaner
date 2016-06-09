@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 rails_cleaner-*.gem
+.byebug_history
