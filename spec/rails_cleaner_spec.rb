@@ -102,5 +102,4 @@ describe RailsCleaner do
         expect(File.exist? 'test_dir/file.coffee').to eq true
     end
   end
-
 end

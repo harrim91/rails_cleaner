@@ -1,4 +1,4 @@
-require 'rails_cleaner/version'
+require "rails_cleaner/version"
 
 module RailsCleaner
 
