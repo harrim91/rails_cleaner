@@ -1,5 +1,6 @@
 require 'rails_cleaner/version'
-
+require 'colorize'
+  
 module RailsCleaner
 
   DIRECTORY_PATH = '.rails_cleaner'
@@ -52,7 +53,7 @@ module RailsCleaner
   def self.confirm_delete
     puts 'you are about to delete:'
     File.open "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}", 'r' do |file|
-      file.each_line { |line| puts line }
+      file.each_line { |line| puts line.colorize(:red) }
     end
     puts 'y or n?'
     answer = gets.chomp
