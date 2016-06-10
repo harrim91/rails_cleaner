@@ -1,85 +1,57 @@
 require 'rails_cleaner/version'
 require 'colorize'
+require 'byebug'
 
-module RailsCleaner
+class RailsCleaner
 
-  DIRECTORY_PATH = '.rails_cleaner'
-  TRACKED_FILE_NAME = 'tracked_files.txt'
-  DELETE_FILE_NAME = 'files_to_delete.txt'
+  DIRECTORY_PATH = '.rails_cleaner/'
+  TRACKED_FILES_LIST = 'tracked_files.txt'
+  TO_DELETE_LIST = 'files_to_delete.txt'
+  ASSETS_PATH = 'app/assets'
 
-  def self.init
-    Dir.mkdir DIRECTORY_PATH unless Dir.exist?(DIRECTORY_PATH)
-    File.open "#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}", 'w' unless File.exist?("#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}",)
+  attr_reader :tracked_files, :files_to_delete
+
+  def create_rc_directory
+    Dir.mkdir DIRECTORY_PATH unless File.exist? DIRECTORY_PATH
   end
 
-  def self.track path='app/assets'
-    tracked_files = Dir.glob("#{path}/**/*").select do |file|
+  def create_rc_file filename
+    File.open DIRECTORY_PATH + filename, 'w'
+  end
+
+  def set_tracked_files
+    @tracked_files = Dir.glob("#{ASSETS_PATH}/**/*").select do |file|
       file.match(/.(scss|coffee)$/)
     end
-
-    File.open "#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}", 'w' do |file|
-      tracked_files.each do |entry|
-        file.write "#{entry}\n"
-      end
-    end
   end
 
-  def self.sort
-    unmodified_files = []
-
-    File.open "#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}", 'r' do |file|
+  def set_files_to_delete file_path
+    @files_to_delete = []
+    File.open DIRECTORY_PATH + file_path, 'r' do |file|
       file.each_line do |line|
-        unmodified_files << line if File.ctime(line.strip)==File.birthtime(line.strip)
-      end
-    end
-
-    File.open "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}", 'w' do |file|
-      unmodified_files.each do |unmodified_file|
-        file.write "#{unmodified_file}"
+        @files_to_delete << line.strip if File.ctime(line.strip)==File.birthtime(line.strip)
       end
     end
   end
 
-  def self.delete
-    files = []
-
-    File.open "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}", 'r' do |file|
-      file.each_line do |line|
-        files << line.strip
+  def write_data_to_file data, file
+    File.open DIRECTORY_PATH + file, 'w' do |f|
+      data.each do |d|
+        f.write "#{d}\n"
       end
     end
-
-    self.confirm_delete files
-
-    files.each do |file|
-      File.delete file
-    end
-
-    self.delete_delete_file
-    self.clear_tracking_file
-
   end
 
-  private
-  def self.confirm_delete files
-    if files.empty?
-      puts 'no files to delete'
-      exit
-    end
-    puts 'you are about to delete:'
-    files.each { |file| puts file.colorize(:red) }
-    puts 'y or n?'
-    answer = gets.chomp
-    fail 'delete aborted' unless answer.downcase == 'y'
+  def delete_delete_file
+    File.delete DIRECTORY_PATH + TO_DELETE_LIST if File.exist? DIRECTORY_PATH + TO_DELETE_LIST
   end
 
-  def self.delete_delete_file
-    File.delete "#{DIRECTORY_PATH}/#{DELETE_FILE_NAME}"
-  end
-
-  def self.clear_tracking_file
-    File.open "#{DIRECTORY_PATH}/#{TRACKED_FILE_NAME}", 'w' do |file|
-      file.truncate 0
+  def clear_tracking_file
+    if File.exist? DIRECTORY_PATH + TRACKED_FILES_LIST
+      File.open DIRECTORY_PATH + TRACKED_FILES_LIST, 'w' do |file|
+        file.truncate 0
+      end
     end
   end
+
 end

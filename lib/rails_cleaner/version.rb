@@ -1,3 +1,3 @@
-module RailsCleaner
-  VERSION = "0.0.5"
+class RailsCleaner
+  VERSION = "0.0.6"
 end

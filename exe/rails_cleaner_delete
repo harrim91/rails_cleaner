@@ -2,4 +2,24 @@
 
 require 'rails_cleaner'
 
-RailsCleaner.delete
+rails_cleaner = RailsCleaner.new
+
+rails_cleaner.set_files_to_delete RailsCleaner::TO_DELETE_LIST
+
+if rails_cleaner.files_to_delete.empty?
+  puts 'No files to delete'
+  exit
+end
+
+puts 'Please select y/n to delete each file'
+
+rails_cleaner.files_to_delete.each do |file|
+  puts file.colorize :red
+  input = gets.chomp
+  if input.downcase == 'y'
+    File.delete file
+  end
+end
+
+rails_cleaner.delete_delete_file
+rails_cleaner.clear_tracking_file
