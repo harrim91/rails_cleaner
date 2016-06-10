@@ -1,6 +1,5 @@
 require 'rails_cleaner/version'
 require 'colorize'
-require 'byebug'
 
 class RailsCleaner
 
