@@ -2,4 +2,4 @@
 
 require 'rails_cleaner'
 
-RailsCleaner.delete
+RailsCleaner.recursive_delete

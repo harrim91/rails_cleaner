@@ -82,4 +82,5 @@ module RailsCleaner
       file.truncate 0
     end
   end
+
 end
