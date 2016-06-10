@@ -42,11 +42,11 @@ class RailsCleaner
     end
   end
 
-  def delete_delete_file
+  def remove_to_delete_list
     File.delete DIRECTORY_PATH + TO_DELETE_LIST if File.exist? DIRECTORY_PATH + TO_DELETE_LIST
   end
 
-  def clear_tracking_file
+  def clear_tracked_files_list
     if File.exist? DIRECTORY_PATH + TRACKED_FILES_LIST
       File.open DIRECTORY_PATH + TRACKED_FILES_LIST, 'w' do |file|
         file.truncate 0

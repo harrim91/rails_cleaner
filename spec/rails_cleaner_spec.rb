@@ -90,22 +90,22 @@ describe RailsCleaner do
     end
   end
 
-  describe '#delete_delete_file' do
+  describe '#remove_to_delete_list' do
     it 'deletes the delete file' do
       rails_cleaner.create_rc_directory
       rails_cleaner.create_rc_file to_delete_list
-      rails_cleaner.delete_delete_file
+      rails_cleaner.remove_to_delete_list
       expect(File.exist? rc_directory + to_delete_list).to eq false
     end
   end
 
-  describe '#clear_tracking_file' do
+  describe '#clear_tracked_files_list' do
     it 'clears the tracking file' do
       rails_cleaner.create_rc_directory
       rails_cleaner.create_rc_file tracked_files_list
       rails_cleaner.set_tracked_files
       rails_cleaner.write_data_to_file rails_cleaner.tracked_files, tracked_files_list
-      rails_cleaner.clear_tracking_file
+      rails_cleaner.clear_tracked_files_list
       expect(File.read rc_directory + tracked_files_list).to eq ''
     end
   end

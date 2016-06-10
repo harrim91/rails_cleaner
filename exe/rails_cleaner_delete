@@ -21,5 +21,5 @@ rails_cleaner.files_to_delete.each do |file|
   end
 end
 
-rails_cleaner.delete_delete_file
-rails_cleaner.clear_tracking_file
+rails_cleaner.remove_to_delete_list
+rails_cleaner.clear_tracked_files_list
