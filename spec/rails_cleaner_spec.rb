@@ -2,104 +2,112 @@ require 'spec_helper'
 
 describe RailsCleaner do
 
-  subject(:rails_cleaner) { described_class }
+  subject(:rails_cleaner) { described_class.new }
+  let(:rc_directory) { described_class::DIRECTORY_PATH }
+  let(:tracked_files_list) { described_class::TRACKED_FILES_LIST }
+  let(:to_delete_list) { described_class::TO_DELETE_LIST }
 
-  before :all do
-    Dir.mkdir 'test_dir'
-    Dir.mkdir 'test_dir/dir1'
-    File.open 'test_dir/file.coffee', 'w'
-    File.open 'test_dir/dir1/file1.coffee', 'w'
-    File.open 'test_dir/file.scss', 'w'
-    File.open 'test_dir/file.rb', 'w'
+  before :each do
+    Dir.mkdir 'app'
+    Dir.mkdir 'app/assets'
+    Dir.mkdir 'app/assets/style'
+    Dir.mkdir 'app/assets/javascripts'
+    File.open 'app/assets/javascripts/file1.coffee', 'w'
+    File.open 'app/assets/javascripts/file2.coffee', 'w'
+    File.open 'app/assets/style/file1.scss', 'w'
+    File.open 'app/assets/style/file2.scss', 'w'
+    File.open 'app/assets/style/file1.rb', 'w'
   end
 
   after :each do
     FileUtils.rm_r '.rails_cleaner'
+    FileUtils.rm_r 'app'
   end
 
-  after :all do
-    FileUtils.rm_r 'test_dir'
-  end
-
-  describe 'self#init' do
-    it 'creates .rails_cleaner/tracked_files.txt' do
-      rails_cleaner.init
-      expect(File.exist? '.rails_cleaner/tracked_files.txt').to eq true
+  describe '#create_rc_directory' do
+    it 'creates a .rails_cleaner directory' do
+      rails_cleaner.create_rc_directory
+      expect(File.exist? rc_directory).to eq true
     end
   end
 
-  describe 'self#track' do
-    it 'adds all .coffee files in a given path to tracked_files.txt' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file.coffee/
-    end
-
-    it 'adds all .scss files in a given path to tracked_files.txt' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/file.scss/
-    end
-
-    it 'searches through subdirectories' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').to match /test_dir\/dir1\/file1.coffee/
-    end
-
-    it 'doesn\'t add other files' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      expect(File.read '.rails_cleaner/tracked_files.txt').not_to match /test_dir\/file.rb/
+  describe '#create_rc_file' do
+    it 'creates a file in the .rails_cleaner directory' do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file tracked_files_list
+      expect(File.exist? rc_directory + tracked_files_list).to eq true
     end
   end
 
-  describe 'self#sort' do
+  describe '#set_tracked_files' do
     before :each do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file tracked_files_list
+    end
+
+    it 'sets all the scss and coffee files in app/assets' do
+      rails_cleaner.set_tracked_files
+      expect(rails_cleaner.tracked_files.sort).to eq [
+                                          'app/assets/javascripts/file1.coffee',
+                                          'app/assets/javascripts/file2.coffee',
+                                          'app/assets/style/file1.scss',
+                                          'app/assets/style/file2.scss']
+    end
+  end
+
+  describe '#write_data_to_file' do
+    before :each do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file tracked_files_list
+    end
+    it 'writes data from an array to a file in the rc_directory' do
+      names = ['michael', 'elia', 'jack', 'joe']
+      rails_cleaner.write_data_to_file names, tracked_files_list
+      names.each do |name|
+        expect(File.read(rc_directory+tracked_files_list)).to match name
+      end
+    end
+  end
+
+  describe '#set_files_to_delete' do
+    before :each do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file tracked_files_list
+      rails_cleaner.set_tracked_files
+      rails_cleaner.write_data_to_file rails_cleaner.tracked_files, tracked_files_list
       sleep 1
-      File.open 'test_dir/file.coffee', 'w' do |file|
+      File.open 'app/assets/style/file1.scss', 'w' do |file|
         file.write 'modified'
       end
     end
 
-    it 'writes unmodified files to files_to_delete.txt' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      rails_cleaner.sort
-      expect(File.read('.rails_cleaner/files_to_delete.txt')).to match 'test_dir/file.scss'
-    end
-
-    it 'doesn\'t write modified files' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      rails_cleaner.sort
-      expect(File.read('.rails_cleaner/files_to_delete.txt')).not_to match 'test_dir/file.coffee'
+    it 'sets all of the unmodified tracked files from the given source file' do
+      rails_cleaner.set_files_to_delete tracked_files_list
+      expect(rails_cleaner.files_to_delete.sort).to eq [
+                                          'app/assets/javascripts/file1.coffee',
+                                          'app/assets/javascripts/file2.coffee',
+                                          'app/assets/style/file2.scss']
     end
   end
 
-  describe 'self#delete' do
-    before :each do
-      sleep 2
-      File.open 'test_dir/file.coffee', 'w' do |file|
-        file.write 'modified'
-      end
-    end
-
-    it 'deletes all the files listed in .rails_cleaner/files_to_delete.txt' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      rails_cleaner.sort
-      rails_cleaner.delete
-      expect(File.exist? 'test_dir/dir1/file1.coffee').to eq false
-      expect(File.exist? 'test_dir/file.scss').to eq false
-    end
-
-    it 'only deletes files listed in .rails_cleaner/files_to_delete.txt' do
-      rails_cleaner.init
-      rails_cleaner.track 'test_dir'
-      rails_cleaner.sort
-      rails_cleaner.delete
-      expect(File.exist? 'test_dir/file.coffee').to eq true
+  describe '#remove_to_delete_list' do
+    it 'deletes the delete file' do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file to_delete_list
+      rails_cleaner.remove_to_delete_list
+      expect(File.exist? rc_directory + to_delete_list).to eq false
     end
   end
+
+  describe '#clear_tracked_files_list' do
+    it 'clears the tracking file' do
+      rails_cleaner.create_rc_directory
+      rails_cleaner.create_rc_file tracked_files_list
+      rails_cleaner.set_tracked_files
+      rails_cleaner.write_data_to_file rails_cleaner.tracked_files, tracked_files_list
+      rails_cleaner.clear_tracked_files_list
+      expect(File.read rc_directory + tracked_files_list).to eq ''
+    end
+  end
+
 end

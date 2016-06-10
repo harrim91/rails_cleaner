@@ -2,4 +2,7 @@
 
 require 'rails_cleaner'
 
-RailsCleaner.track
+rails_cleaner = RailsCleaner.new
+
+rails_cleaner.set_tracked_files
+rails_cleaner.write_data_to_file rails_cleaner.tracked_files, RailsCleaner::TRACKED_FILES_LIST

@@ -2,4 +2,7 @@
 
 require 'rails_cleaner'
 
-RailsCleaner.sort
+rails_cleaner = RailsCleaner.new
+
+rails_cleaner.set_files_to_delete RailsCleaner::TRACKED_FILES_LIST
+rails_cleaner.write_data_to_file rails_cleaner.files_to_delete, RailsCleaner::TO_DELETE_LIST

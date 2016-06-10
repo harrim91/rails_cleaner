@@ -2,4 +2,7 @@
 
 require 'rails_cleaner'
 
-RailsCleaner.init
+rails_cleaner = RailsCleaner.new
+
+rails_cleaner.create_rc_directory
+rails_cleaner.create_rc_file RailsCleaner::TRACKED_FILES_LIST
