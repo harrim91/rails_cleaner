@@ -26,7 +26,7 @@ Or install it yourself as:
 
 In your command line:
 
-`rails_cleaner_init` creates a `.rails_cleaner` directory in your working directory, containing a `tracked_fies.txt` file.
+`rails_cleaner_init` creates a `.rails_cleaner` directory in your working directory, containing a `tracked_files.txt` file.
 `rails_cleaner_track` adds all `.scss` and `.coffee` files in the `app/assets` directory to `tracked_files.txt`
 `rails_cleaner_sort` creates `files_to_delete.txt` in `.rails_cleaner`. This contains all files from `tracked_files.txt` where the created time and last modified times are the same.
 `rails_cleaner_delete` deletes all files listed in `files_to_delete.txt`
